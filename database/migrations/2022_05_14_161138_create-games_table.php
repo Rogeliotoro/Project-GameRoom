@@ -13,7 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('games', function (Blueprint $table) {
+            $table->id();
+            $table->string('name',100);
+            $table->string('category',100);
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('games');
     }
 };
