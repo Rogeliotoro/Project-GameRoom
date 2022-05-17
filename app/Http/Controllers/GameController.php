@@ -18,7 +18,7 @@ class GameController extends Controller
 
 
             $games = User::find($userId)->games;
-            //$contacts = Contact::find(7)->user;
+            //$games = Game::find(1)->user;
 
             $games = Game::where('id_user', $userId)->get()->toArray();
             if (empty($games)) {
