@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Party extends Model
+class PartyRoom extends Model
 {
     use HasFactory;
     protected $fillable = [
         'name',
-        'game_id',
+        'id_game',
         'id_user',
     ];
 
@@ -25,6 +25,6 @@ class Party extends Model
     }
     public function messages()
     {
-        return $this->hasMany(Message::class, 'party_id');
+        return $this->hasMany(Message::class, 'id_party');
     }
 };
