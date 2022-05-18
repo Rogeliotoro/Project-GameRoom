@@ -25,11 +25,19 @@ Route::group([
     'middleware' => 'jwt.auth'
 ], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/profile', [AuthController::class, 'profile']);
 });
 
+// Users 🙋
 
-//Game
+Route::get('/users', [UserController::class, 'getAllusers']);
+Route::get('/users/{id}', [UserController::class, 'getusersById']);
+Route::post('/users', [UserController::class, 'createNewUser']);
+Route::put('/users/{id}', [UserController::class, 'updateUserById']);
+Route::delete('/users/{id}', [UserController::class, 'deleteUserById']);
+
+//Game🎮🕹️
+
 Route::get('/games', [GameController::class, 'getAllGames']);
 Route::get('/games/{id}', [GameController::class, 'getGameById']);
 Route::post('/games', [GameController::class, 'createGame']);
