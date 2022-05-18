@@ -25,6 +25,6 @@ class PartyRoom extends Model
     }
     public function messages()
     {
-        return $this->hasMany(Message::class, 'id_party');
+        return $this->hasMany(Chat::class, 'id_party');
     }
 };
