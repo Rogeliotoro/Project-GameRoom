@@ -74,5 +74,34 @@ class MessageController extends Controller
             return response()->json([ 'error'=> 'Ups! Something wrong'], 500);
         }
     }
+
+    public function updateChat(Request $request, $messageId) 
+    {
+        try {
+            Log::info('Update message by id');
+            $userId = auth()->user()->id;
+            $validator = Validator::make($request->all(), [   
+                'message' => 'string',
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 404);
+            };
+            $messageUpdate = Chat::where('id',$messageId)->where('id_user',$userId)->first();
+
+            if(empty($messageUpdate)){
+                return response()->json(["error"=> "You do not have messages"], 404);
+            };
+            if(isset($request->message)){
+                $messageUpdate->message = $request->message;
+            };
+            $messageUpdate->save();
+
+            return response()->json(["data"=>$messageUpdate, "success"=>'Message updated'], 200);
+
+        } catch (\Throwable $th) {
+            Log::error('Failed to update the message->'.$th->getMessage());
+            return response()->json([ 'error'=> 'Error, try again!'], 500);
+        }
+    }
 }
 
