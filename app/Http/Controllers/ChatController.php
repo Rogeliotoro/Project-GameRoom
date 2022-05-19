@@ -38,4 +38,41 @@ class MessageController extends Controller
             return response()->json(['error' => 'Error, try again!'], 500);
         }
     }
+    public function getChats()
+    {
+        try {
+            Log::info('Init get all messages');
+            $userId = auth()->user()->id;
+            $message = DB::table('messages')->where('id_user', $userId)->get()->toArray();
+
+            if (empty($message)) {
+                return response()->json(
+                    ["success" => "You do not have messages"],202);
+            };
+            return response()->json($message, 200);
+        } catch (\Throwable $th) {
+            Log::error('Failed to get all the messages->' . $th->getMessage());
+            return response()->json(['error' => 'Error, try again!'], 500);
+        }
+    }
+    public function deleteChat($id)
+    {
+        try {
+            Log::info('delete chats');
+            $userId = auth()->user()->id;
+            $message = Chat::where('id',$id)->where('id_user',$userId)->first();
+            if(empty($message)){
+                return response()->json(["error"=> "You do not have messages"], 404);
+            };
+
+            $message->delete();
+
+            return response()->json(["data"=> "message deleted"], 200);
+
+        } catch (\Throwable $th) {
+            Log::error('Failes to deleted the message->'.$th->getMessage());
+            return response()->json([ 'error'=> 'Ups! Something wrong'], 500);
+        }
+    }
 }
+
