@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,11 +16,8 @@ class GameController extends Controller
         try {
             Log::info('init get all games');
             $userId = auth()->user()->id;
-
-
             $games = User::find($userId)->games;
             //$games = Game::find(1)->user;
-
             $games = Game::where('id_user', $userId)->get()->toArray();
             if (empty($games)) {
                 return response()->json(["sucess" => "game no exits"], 404);
@@ -31,18 +29,40 @@ class GameController extends Controller
         }
     }
 
-    public function getGameById($id)
+    public function gameById($id)
     {
         try {
-            Log::info('init get all contacts');
-            $games = Game::where('id', $id)->where('user_id', 1)->first();
-            if (empty($games)) {
-                return response()->json(["sucess" => "game no exits"], 404);
-            }
-            return response()->json($games, 200);
+            $userId = auth()->user()->id;
+            $game = DB::table('games')->where('id_user', $userId)->where('id_user', $id)->get();
+            if (empty($game)) {
+                return response()->json(
+                    ["error" => "We do not have this game"],
+                    400
+                );
+            };
+
+            return response()->json($game, 200);
         } catch (\Throwable $th) {
-            Log::error('ha ocurrido un error->' . $th->getMessage());
-            return response()->json(["error" => "upps"], 500);
+            Log::error('Fail, can not get game by id -> ' . $th->getMessage());
+
+            return response()->json(['error' => 'Error, try again!'], 500);
+        }
+    }
+
+    public function gameByName($name) // By Title, 
+    {
+        try {
+            Log::info('Get a game by name');
+            $game = DB::table('games')->where('name', $name)->get();
+            if (empty($game)) {
+                return response()->json(
+                    ["error" => "this game no exists"],400);
+            };
+
+            return response()->json($game, 200);
+        } catch (\Throwable $th) {
+            Log::error('Fail, can not get game by name -> ' . $th->getMessage());
+            return response()->json(['error' => 'Error, try again!'], 500);
         }
     }
 
@@ -57,7 +77,6 @@ class GameController extends Controller
             return response()->json($validator->errors(), 400);
         }
         $userId = auth()->user()->id;
-
         $newGame = new Game();
         $newGame->name = $request->name;
         $newGame->category = $request->category;
@@ -99,4 +118,3 @@ class GameController extends Controller
         return 'Delete by id: ' . $id;
     }
 }
-

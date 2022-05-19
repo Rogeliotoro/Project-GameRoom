@@ -50,5 +50,6 @@ Route::delete('/party/{id}', [PartyController::class, 'deletePartyRoom']);
 Route::get('/games', [GameController::class, 'getAllGames']);
 Route::get('/games/{id}', [GameController::class, 'getGameById']);
 Route::post('/games', [GameController::class, 'createGame']);
+Route::get('/game/name/{name}', [GameController::class, 'gameByname']); //title 
 Route::patch('/games/{id}', [GameController::class, 'updateGame']);
 Route::delete('/games/{id}', [GameController::class, 'deleteGame']);
