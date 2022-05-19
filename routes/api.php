@@ -69,7 +69,7 @@ Route::group([
     'middleware' => 'jwt.auth'
 ], function(){
 Route::post('/chat/{id}', [ChatController::class, 'newchat']);    
-Route::get('/chats', [ChatController::class, 'getchats']); // all messages of user loged
-Route::put('/message/{id}', [ChatController::class, 'updateChat']); //message id, only can edit the owner of message
+Route::get('/chats', [ChatController::class, 'getchats']); 
+Route::put('/message/{id}', [ChatController::class, 'updateChat']); 
 Route::delete('/message/{id}', [ChatController::class, 'deleteChat']);
 });
