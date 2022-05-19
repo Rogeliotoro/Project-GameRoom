@@ -17,6 +17,7 @@ class AuthController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:6',
+                'nickname' => 'required|string|max:255',
             ]);
             if ($validator->fails()) {
                 return response()->json($validator->errors()->toJson(), 400);
@@ -24,7 +25,8 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
-                'password' => bcrypt($request->password)
+                'password' => bcrypt($request->password),
+                'nickname' => $request->get('nickname'),
             ]);
             $token = JWTAuth::fromUser($user);
             return response()->json(compact('user', 'token'), 201);
