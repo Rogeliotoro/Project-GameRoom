@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class MessageController extends Controller
+class ChatController extends Controller
 {
     public function newChat(Request $request, $partyId)
     {
