@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+// out auth
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -30,20 +30,28 @@ Route::group([
 });
 
 // Users 🙋
-
-Route::get('/users', [UserController::class, 'getAllusers']);
-Route::get('/users/{id}', [UserController::class, 'getusersById']);
-Route::post('/users', [UserController::class, 'createNewUser']);
-Route::put('/users/{id}', [UserController::class, 'updateUserById']);
-Route::delete('/users/{id}', [UserController::class, 'deleteUserById']);
+Route::group([
+    'middleware' => 'jwt.auth'
+], function () {
+    Route::get('/users', [UserController::class, 'getAllusers']);
+    Route::get('/users/{id}', [UserController::class, 'getusersById']);
+    Route::post('/users', [UserController::class, 'createNewUser']);
+    Route::put('/users/{id}', [UserController::class, 'updateUserById']);
+    Route::delete('/users/{id}', [UserController::class, 'deleteUserById']);
+});
 
 // Parties Room 🤪
+Route::group([
+    'middleware' => 'jwt.auth'
+], function () {
+    Route::post('/party', [PartyController::class, 'createPartyRoom']);
+    Route::get('/parties', [PartyController::class, 'getAllPartiesRoom']);
+    Route::get('/party/{id}', [PartyController::class, 'getPartyRoomById']); 
+    Route::put('/party/{id}', [PartyController::class, 'updatePartyRoom']);
+    Route::delete('/party/{id}', [PartyController::class, 'deletePartyRoom']);
+});
 
-Route::post('/party', [PartyController::class, 'createPartyRoom']);
-Route::get('/parties', [PartyController::class, 'getAllPartiesRoom']);
-Route::get('/party/{id}', [PartyController::class, 'getPartyRoomById']); //by game id
-Route::put('/party/{id}', [PartyController::class, 'updatePartyRoom']);
-Route::delete('/party/{id}', [PartyController::class, 'deletePartyRoom']);
+
 
 //Game🎮🕹️
 
